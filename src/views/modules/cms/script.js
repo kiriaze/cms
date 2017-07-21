@@ -21,8 +21,6 @@ import mediaManager from './media-manager/media-manager.js';
 
 import Auth from './auth.js';
 
-import FormTemplate from './form/template.js';
-
 class CMS {
 
 	constructor(){
@@ -38,17 +36,6 @@ class CMS {
 		this.$addPost		= $('.add-post');
 		this.$editPost		= $('.edit-post');
 		this.$deletePost	= $('.delete-post');
-
-		// 
-		// load template and pass data into template
-		// router usage: if page load corresponding template?
-		let data = {
-			heading: 'foo'
-		};
-		let template = new FormTemplate(data);
-		$('.app').append(template.template);
-
-		// 
 
 		if ( this.auth.userLoggedIn() ) {
 
