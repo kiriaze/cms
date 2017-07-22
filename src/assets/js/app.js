@@ -11,10 +11,12 @@ import jQuery from 'jquery';
 
 // // import mods script.js, which imports the associated style.scss
 // // then inject to dom
-// import {element} from '../../views/modules/heroes/hero/script';
-// document.write(element);
-
-// import '../../views/modules/heroes/hero/template.twig'; // requires twig-loader
+// let data = {
+// 	heading: 'job'
+// };
+// import HeroTemplate from '../../views/modules/heroes/hero/script';
+// let template = HeroTemplate(data);
+// document.write(template);
 
 
 ///////////////////////////////////////////////////////////////////////
@@ -23,12 +25,14 @@ import jQuery from 'jquery';
 import '../../views/modules/cms/script.js';
 
 // views
+import LoginTemplate from '../../views/modules/cms/login/template.js';
 import FormTemplate from '../../views/modules/cms/form/template.js';
 
 // Router
 
 import Router from './router.js';
 
+// hijack anchors
 $(document).on('click', 'a', (e) => {
 	e.preventDefault();
 	// prob ignore target=new/_blank
@@ -36,9 +40,31 @@ $(document).on('click', 'a', (e) => {
 });
 
 Router.route('/', (e) => {
-	console.log('home');
+	fetch('index.html')
+		.then((response) => {
+			return response.text();
+		})
+		.then((markup) => {
+			// console.log(markup);
+			let $markup = $(markup).find('.app').html();
+			$('.app').html($markup);
+		})
+		.catch(function(err) {
+			// Error :(
+		});
 });
 
+// js template injection
+Router.route('/login', () => {
+
+	let data = {};
+	let template = new LoginTemplate(data);
+
+	$('.app').html(template.template);
+
+});
+
+// js template injection
 Router.route('/add-post', () => {
 
 	// load template and pass data into template
@@ -53,13 +79,14 @@ Router.route('/add-post', () => {
 
 });
 
+// page routing markup injection
 Router.route('/$slug', (slug) => {
 	
-	console.log(slug);
+	// console.log(slug);
 	// pageTransition();
 
 	// new age ajax
-	fetch(slug + '.html', {method: 'get'})
+	fetch(slug + '.html')
 		.then((response) => {
 			return response.text();
 		})
